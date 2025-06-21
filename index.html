@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DODO Flash Loan Arbitrage</title>
+  <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
+  <style>
+    body { background-color: #0a0; color: white; font-family: sans-serif; padding: 20px; }
+    table { border-collapse: collapse; width: 100%; margin-top: 20px; }
+    th, td { padding: 8px 12px; border: 1px solid #444; text-align: center; }
+    .profitable { background-color: #00ff00; color: black; font-weight: bold; }
+    #log { max-height: 200px; overflow-y: auto; border: 1px solid #444; margin-top: 10px; padding: 10px; background: #111; }
+    button { padding: 8px 16px; margin: 5px; background: #333; color: white; border: none; border-radius: 4px; cursor: pointer; }
+    button:hover { background: #555; }
+    .control-group { margin: 10px 0; display: flex; flex-wrap: wrap; align-items: center; gap: 15px; }
+    .control-group label { display: flex; align-items: center; gap: 5px; }
+    .profit-display { font-size: 1.2em; font-weight: bold; margin: 10px 0; padding: 8px; background: #333; border-radius: 4px; }
+  </style>
+</head>
+<body>
+  <h1>🔄 DODO Flash Loan Arbitrage</h1>
+  <p><strong>💳 Wallet:</strong> <span id="wallet">-</span></p>
+  <p><strong>💵 Wallet USDC Balance:</strong> <span id="walletBalance">-</span></p>
+  <p><strong>🚀 Contract USDC Balance:</strong> <span id="contractBalance">-</span></p>
+  <div class="profit-display">
+    <strong>🌟 Accumulated Profit:</strong> <span id="accumulatedProfit">0.00</span> USDC
+  </div>
+  <div class="control-group">
+    <button id="connectWallet">🔑 Connect Wallet</button>
+    <button id="scanNow">🔍 Scan Now</button>
+    <button id="withdrawUSDC">💸 Withdraw USDC</button>
+  </div>
+  <div class="control-group">
+    <label><input type="checkbox" id="autoTradeToggle"> 🔄 Auto Trade</label>
+    <label><input type="checkbox" id="backgroundTradeToggle"> 🌐 Auto Trade in Background</label>
+    <label><input type="checkbox" id="accumulateToggle"> 🤔 Let profits accumulate</label>
+    <label><input type="checkbox" id="positiveBalanceToggle" checked> 📈 Only trade if profit</label>
+  </div>
+  <div class="control-group">
+    <label>📈 Min Profit %: <input type="number" id="minProfitPct" value="0.2" step="0.1" min="0.1">%</label>
+    <label>💵 Trade Amount: <input type="number" id="tradeAmount" value="10" min="1"> USDC</label>
+    <label>🔄 Slippage %: <input type="number" id="slippagePct" value="0" step="0.1" min="0">%</label>
+    <label>🧰 Batch Trades (0–100): <input type="number" id="batchCount" value="1" min="0" max="100"></label>
+  </div>
+  <table id="resultTable">
+    <thead>
+      <tr>
+        <th>💰 Token</th>
+        <th>🗺️ Buy Router</th>
+        <th>🗺️ Sell Router</th>
+        <th>💵 Buy Price</th>
+        <th>💵 Sell Price</th>
+        <th>💸 Profit $</th>
+        <th>📈 Profit %</th>
+        <th>🟢 Status</th>
+        <th>📋 Action</th>
+      </tr>
+    </thead>
+    <tbody id="results"></tbody>
+  </table>
+  <div id="log"></div>
+
+  <script>
+    const contractAddress = "0x98FA2A393Bf5C297FE29E160B244b560a61d9976"; // Replace with your deployed contract
+    const contractABI = [
+      // full ABI should be added here
+      { "stateMutability": "view", "type": "function" }
+    ];
+  </script>
+  <script src="./main-arbitrage.js"></script>
+</body>
+</html>
